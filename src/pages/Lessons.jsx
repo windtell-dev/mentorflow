@@ -34,6 +34,17 @@ export default function Lessons({ state, refresh }) {
 
   const toggle = async (r) => { await post('/api/lessons/toggle', { learnerId: r.learner.id, date: r.date, topic: r.topic }); await refresh() }
 
+  const [topicModal, setTopicModal] = useState(false)
+  const [nt, setNt] = useState({ name: '', subject: '', subtopics: '' })
+  const [busy, setBusy] = useState(false)
+  const saveTopic = async () => {
+    if (!nt.name.trim()) return
+    setBusy(true)
+    await post('/api/topics', { name: nt.name, subject: nt.subject || 'General', subtopics: nt.subtopics })
+    await refresh()
+    setBusy(false); setNt({ name: '', subject: '', subtopics: '' }); setTopicModal(false)
+  }
+
   const Card = (r) => {
     const done = r.completed !== false
     return (
@@ -71,8 +82,13 @@ export default function Lessons({ state, refresh }) {
 
       <div className="tl-split">
         <section className="tl-topics">
-          <h2 className="section-title flush tl-heading">Topics</h2>
-          {state.topics.length === 0 && <p className="empty-hint">No topics yet. Add one from Make lesson plan.</p>}
+          <div className="tl-topics-head">
+            <h2 className="tl-heading">Topics</h2>
+            <button className="icon-btn" title="Add a topic" aria-label="Add a topic" onClick={() => setTopicModal(true)}>+</button>
+          </div>
+          {state.topics.length === 0 && (
+            <div className="topic-empty">No topics yet.<br />Tap <b>+</b> to add the first one.</div>
+          )}
           <div className="topic-cards">
             {state.topics.map((t) => (
               <div className="topic-card" key={t.id}>
@@ -90,7 +106,7 @@ export default function Lessons({ state, refresh }) {
 
         <section className="tl-lessons">
           <div className="tl-lessons-head">
-            <h2 className="section-title flush tl-heading">Lesson plans</h2>
+            <h2 className="tl-heading">Lesson plans</h2>
             <div className="view-toggle">
               <button className={view === 'list' ? 'seg on' : 'seg'} onClick={() => setView('list')}>List</button>
               <button className={view === 'grid' ? 'seg on' : 'seg'} onClick={() => setView('grid')}>Grid</button>
@@ -114,6 +130,24 @@ export default function Lessons({ state, refresh }) {
           </div>
         </section>
       </div>
+
+      {topicModal && (
+        <div className="modal-backdrop" onClick={() => setTopicModal(false)}>
+          <div className="modal small" onClick={(e) => e.stopPropagation()}>
+            <h2 className="modal-title">Add a topic</h2>
+            <p className="focus-line">One main topic, with optional subtopics.</p>
+            <div className="modal-form single">
+              <label>Topic name<input autoFocus value={nt.name} onChange={(e) => setNt({ ...nt, name: e.target.value })} placeholder="e.g. Comparing fractions" onKeyDown={(e) => e.key === 'Enter' && saveTopic()} /></label>
+              <label>Subject<input value={nt.subject} onChange={(e) => setNt({ ...nt, subject: e.target.value })} placeholder="e.g. Math" /></label>
+              <label>Subtopics<input value={nt.subtopics} onChange={(e) => setNt({ ...nt, subtopics: e.target.value })} placeholder="Equivalent fractions, Number lines" /></label>
+              <div className="modal-actions">
+                <button type="button" className="ghost" onClick={() => setTopicModal(false)}>Cancel</button>
+                <button className="primary" onClick={saveTopic} disabled={busy || !nt.name.trim()}>{busy ? 'Adding…' : 'Add topic'}</button>
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   )
 }

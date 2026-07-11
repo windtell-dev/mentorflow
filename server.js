@@ -480,4 +480,4 @@ if (fs.existsSync(dist)) {
 }
 
 const port = process.env.PORT || 3001
-app.listen(port, () => console.log(`TeachPath server on :${port} — Gradient AI ${KEY ? `LIVE (deep=${MODEL_DEEP}, fast=${MODEL_FAST}, tts=${MODEL_TTS})` : 'mock mode'}`))
+app.listen(port, () => console.log(`MentorFlow server on :${port} — Gradient AI ${KEY ? `LIVE (deep=${MODEL_DEEP}, fast=${MODEL_FAST}, tts=${MODEL_TTS})` : 'mock mode'}`))

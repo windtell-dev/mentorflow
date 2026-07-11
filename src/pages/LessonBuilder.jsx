@@ -80,7 +80,7 @@ export default function LessonBuilder({ state, refresh }) {
 
   // ---- loader phases ----
   if (phase === 'intro')
-    return <div className="prepare-layout"><div className="prepare-main"><Thinking title={`Let's get to know ${learner.name.split(' ')[0]}.`} messages={['This helps TeachPath personalize future sessions.']} /></div></div>
+    return <div className="prepare-layout"><div className="prepare-main"><Thinking title={`Let's get to know ${learner.name.split(' ')[0]}.`} messages={['This helps MentorFlow personalize future sessions.']} /></div></div>
   if (phase === 'building')
     return <div className="prepare-layout"><div className="prepare-main"><Thinking title={`Building ${learner.name.split(' ')[0]}'s profile`} messages={['Building learner profile…', 'Analyzing teaching preferences…', 'Creating lesson strategy…', 'Preparing session…']} /></div></div>
   if (phase === 'analyzing')
@@ -90,7 +90,7 @@ export default function LessonBuilder({ state, refresh }) {
   if (phase === 'onboard')
     return (
       <div className="narrow">
-        <header className="page-head"><div><div className="eyebrow">New learner</div><h1>Getting to know {learner.name.split(' ')[0]}</h1><p className="focus-line">A few taps so TeachPath can personalize every future session.</p></div></header>
+        <header className="page-head"><div><div className="eyebrow">New learner</div><h1>Getting to know {learner.name.split(' ')[0]}</h1><p className="focus-line">A few taps so MentorFlow can personalize every future session.</p></div></header>
         <div className="debrief-form">
           <label>What subject?<input value={ob.subject} onChange={(e) => setOb({ ...ob, subject: e.target.value })} placeholder="e.g. Math, Reading" /></label>
           <label>First topic <span className="legend-hint">this becomes a topic you can reuse</span><input list="ob-topics" value={ob.topic} onChange={(e) => setOb({ ...ob, topic: e.target.value })} placeholder="e.g. Times tables" />
@@ -117,7 +117,7 @@ export default function LessonBuilder({ state, refresh }) {
   return (
     <div className="prepare-layout">
       <div className="prepare-main">
-        <header className="page-head"><div><h1>Prepare session</h1><p className="focus-line">Plan intentionally. Teach with purpose.</p></div></header>
+        <header className="page-head"><div><h1>Prepare Lesson</h1><p className="focus-line">Plan intentionally. Teach with purpose.</p></div></header>
 
         <div className="prepare-fields">
           <label>Learner

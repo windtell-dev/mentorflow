@@ -1,8 +1,8 @@
-# TeachPath
+# MentorFlow
 
 *Technology can deliver information. People create understanding.*
 
-A calm teaching companion for tutors, mentors, volunteers, and older siblings — the people who teach one learner at a time. TeachPath is a private teaching journal with intelligent structure: you reflect for two minutes after a session, and DigitalOcean Gradient AI turns that reflection into durable memory — how this learner learns, what to try next, and a warm summary for their family.
+A calm teaching companion for tutors, mentors, volunteers, and older siblings — the people who teach one learner at a time. MentorFlow is a private teaching journal with intelligent structure: you reflect for two minutes after a session, and DigitalOcean Gradient AI turns that reflection into durable memory — how this learner learns, what to try next, and a warm summary for their family.
 
 ## The loop
 
@@ -52,8 +52,8 @@ Express serves the built frontend from `dist/` in production — one component, 
 
 ## Demo (90 seconds)
 
-1. Dashboard — today's sessions, learners, what TeachPath is noticing. One primary action: **Prepare next session**.
-2. Prepare Jasmine's fractions session — the plan is drafted around what TeachPath remembers about *her* (pizza model works, number line doesn't yet).
+1. Dashboard — today's sessions, learners, what MentorFlow is noticing. One primary action: **Prepare next session**.
+2. Prepare Jasmine's fractions session — the plan is drafted around what MentorFlow remembers about *her* (pizza model works, number line doesn't yet).
 3. Teach (offstage). Then reflect: two honest minutes about where she lit up and where she struggled.
 4. Watch her profile rewrite itself — patterns, next-session moves, family summary.
 5. One click: the summary in Spanish. One more: as a voice note her family can listen to.

@@ -1,8 +1,9 @@
 {
-  "name": "teachpath",
+  "name": "mentorflow",
   "private": true,
   "version": "0.1.0",
   "type": "module",
+  "engines": { "node": ">=20" },
   "scripts": {
     "dev": "concurrently -k \"node --env-file-if-exists=.env server.js\" \"vite\"",
     "build": "vite build",

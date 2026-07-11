@@ -1,5 +1,5 @@
 import React, { useCallback, useEffect, useState } from 'react'
-import { NavLink, Route, Routes } from 'react-router-dom'
+import { NavLink, Route, Routes, useLocation } from 'react-router-dom'
 import Dashboard from './pages/Dashboard.jsx'
 import Learner from './pages/Learner.jsx'
 import LessonBuilder from './pages/LessonBuilder.jsx'
@@ -22,13 +22,20 @@ const ICONS = {
   calendar: <><rect x="3" y="4" width="18" height="17" rx="2" /><path d="M3 9h18M8 2v4M16 2v4" /></>,
 }
 
+// Jump to the top of the page on every route change (nav, quick actions, etc.)
+function ScrollToTop() {
+  const { pathname } = useLocation()
+  useEffect(() => { window.scrollTo(0, 0) }, [pathname])
+  return null
+}
+
 export default function App() {
   const [state, setState] = useState(null)
   const refresh = useCallback(async () => {
     setState(await (await fetch('/api/state')).json())
   }, [])
   useEffect(() => { refresh() }, [refresh])
-  if (!state) return <div className="loading">TeachPath</div>
+  if (!state) return <div className="loading">MentorFlow</div>
 
   const links = [
     ['/', 'Dashboard', 'dashboard', true],
@@ -40,10 +47,11 @@ export default function App() {
 
   return (
     <div className="shell">
+      <ScrollToTop />
       <header className="topbar">
         <div className="topbar-brand">
-          <span className="wordmark">TeachPath</span>
-          <span className="brand-motto">People create understanding.</span>
+          <span className="wordmark">MentorFlow</span>
+          <span className="brand-motto">Empowers the people who teach, and makes learners shine.</span>
         </div>
         <nav className="topnav">
           {links.map(([to, label, icon, end]) => (

@@ -1,4 +1,4 @@
-// Seed data for TeachPath. One mentor, four learners.
+// Seed data for MentorFlow. One mentor, four learners.
 // Dates are relative to server start so the demo always looks "today".
 const today = new Date()
 const iso = (d) => d.toISOString().slice(0, 10)

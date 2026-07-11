@@ -132,8 +132,7 @@ export default function Dashboard({ state }) {
 
           <div className="today-card">
             <div className="today-head">
-              <h2 className="section-title flush">Today's sessions</h2>
-              <span className="today-date">{longDate()}</span>
+              <h2 className="section-title flush">Today's sessions <span className="today-date">— {longDate()}</span></h2>
             </div>
             <div className="today-board">
               {sessions.map((s) => {

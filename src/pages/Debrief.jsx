@@ -71,7 +71,7 @@ export default function Debrief({ state, refresh }) {
   return (
     <div className="narrow">
       <div className="breadcrumb"><Link to="/">← Today</Link></div>
-      <header className="page-head"><div><div className="eyebrow">Reflection · {session.topic}</div><h1>How did it go with {f}?</h1><p className="focus-line">A few taps. TeachPath turns it into {f}'s memory.</p></div></header>
+      <header className="page-head"><div><div className="eyebrow">Reflection · {session.topic}</div><h1>How did it go with {f}?</h1><p className="focus-line">A few taps. MentorFlow turns it into {f}'s memory.</p></div></header>
 
       <div className="debrief-form">
         <fieldset className="rate-block">

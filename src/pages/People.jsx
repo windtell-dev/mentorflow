@@ -34,7 +34,7 @@ function AddLearnerModal({ onClose, onAdd }) {
         <form className="modal-form" onSubmit={submit}>
           {FIELDS.map(([key, label, optional]) => (
             <label key={key} className={key === 'notes' || key === 'name' ? 'span-2' : ''}>
-              {label} {optional && <span className="legend-hint">optional</span>}
+              {label}
               {key === 'notes'
                 ? <textarea rows={2} value={form[key] || ''} onChange={(e) => setForm({ ...form, [key]: e.target.value })} />
                 : <input value={form[key] || ''} onChange={(e) => setForm({ ...form, [key]: e.target.value })} />}
@@ -89,7 +89,7 @@ export default function People({ state, refresh }) {
               </div>
               <div className="person-actions">
                 <Link to={`/learner/${l.id}`} className="ghost">Open profile</Link>
-                <button className="primary" onClick={() => navigate(next ? `/prepare/${l.id}?session=${next.id}` : `/prepare/${l.id}`)}>Prepare next session</button>
+                <button className="primary" onClick={() => navigate(next ? `/prepare/${l.id}?session=${next.id}` : `/prepare/${l.id}`)}>Prepare Next Lesson</button>
               </div>
             </div>
           )

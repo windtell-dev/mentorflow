@@ -1,0 +1,26 @@
+# DigitalOcean App Platform spec for MentorFlow.
+# One Node web service: `vite build` produces dist/, then server.js serves
+# both the static frontend and the /api routes.
+#
+# The Gradient AI key is NOT in this file on purpose — add it as an encrypted
+# env var in the App Platform dashboard (or via `doctl`) so it never lands in git.
+name: mentorflow
+region: nyc
+services:
+  - name: web
+    github:
+      repo: windtell-dev/mentorflow
+      branch: main
+      deploy_on_push: true
+    environment_slug: node-js
+    build_command: npm run build
+    run_command: node server.js
+    instance_size_slug: basic-xxs
+    instance_count: 1
+    http_port: 8080
+    envs:
+      # App Platform sets PORT to http_port (8080); server.js already reads process.env.PORT.
+      - key: DIGITAL_OCEAN_MODEL
+        scope: RUN_TIME
+        value: openai-gpt-5.5
+      # Add DIGITAL_OCEAN_MODEL_ACCESS_KEY as an ENCRYPTED secret in the dashboard.

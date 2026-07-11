@@ -50,7 +50,7 @@ export default function Learner({ state, refresh }) {
           <p className="focus-line">{learner.subject} · {learner.age} yrs{learner.readingLevel ? ` · ${learner.readingLevel}` : ''}</p>
         </div>
         <div className="head-actions">
-          {nextSession && <Link className="primary" to={`/prepare/${learner.id}?session=${nextSession.id}`}>Prepare next session</Link>}
+          {nextSession && <Link className="primary" to={`/prepare/${learner.id}?session=${nextSession.id}`}>Prepare Next Lesson</Link>}
           <button className="ghost">Edit profile</button>
         </div>
       </header>
@@ -126,6 +126,21 @@ export default function Learner({ state, refresh }) {
       </div>
 
       <div className="secondary-grid">
+        <div className="card">
+          <div className="card-label">Lessons ({learner.lessons.length})</div>
+          {learner.lessons.length === 0 && <p className="empty-hint">No lessons logged yet.</p>}
+          <ul className="mini-lessons">
+            {learner.lessons.slice(0, 6).map((l, i) => (
+              <li className="mini-lesson" key={i}>
+                <span className="ml-date">{fmt(l.date)}</span>
+                <span className="ml-topic">{l.topic}{l.breakthrough && <span className="star-mark"> ★</span>}</span>
+                <span className="ml-delta">U {l.understBefore}<span className="arrow">→</span>{l.understAfter}</span>
+              </li>
+            ))}
+          </ul>
+          {learner.lessons.length > 6 && <div className="card-foot">+{learner.lessons.length - 6} more in Lesson history below</div>}
+        </div>
+
         <div className="card noticing">
           <div className="card-label">How {f} learns — measured</div>
           {SIGNALS.map((s) => {
