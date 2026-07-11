@@ -21,6 +21,9 @@ export default function Debrief({ state, refresh }) {
   const [phase, setPhase] = useState('form') // form | loading | done
   const [intel, setIntel] = useState(null)
   const [aiUsed, setAiUsed] = useState(false)
+  const [pLang, setPLang] = useState('English')
+  const [pText, setPText] = useState('')
+  const [pBusy, setPBusy] = useState(false)
   if (!session) return <p>Session not found.</p>
 
   const f = learner.name.split(' ')[0]
@@ -39,6 +42,14 @@ export default function Debrief({ state, refresh }) {
   if (phase === 'loading')
     return <div className="narrow"><Thinking title={`Updating ${f}'s learner memory`} messages={['Reading your debrief…', 'Updating teaching intelligence…', 'Refreshing confidence & understanding…', 'Saving to learner memory…']} /></div>
 
+  const setLang = async (lang) => {
+    setPLang(lang)
+    if (lang === 'English') return setPText('')
+    setPBusy(true)
+    const r = await post('/api/translate', { learnerId: learner.id, language: lang })
+    setPText(r.ok ? (await r.json()).text : ''); setPBusy(false)
+  }
+
   if (phase === 'done') {
     const rows = [
       ['AI observations', intel.observations?.join(' ')],
@@ -47,7 +58,6 @@ export default function Debrief({ state, refresh }) {
       ['Resource / homework', intel.homework?.join(' · ')],
       ['Strategy effectiveness', intel.strategyNote],
       ['Confidence / understanding trend', intel.trendNote],
-      ...(intel.parentSummary ? [['Parent / guardian summary', intel.parentSummary]] : []),
     ]
     return (
       <div className="narrow">
@@ -60,6 +70,21 @@ export default function Debrief({ state, refresh }) {
             <div className="memory-row" key={i} style={{ animationDelay: `${i * 0.08}s` }}><span className="memory-label">{label}</span><span className="memory-val">{val}</span></div>
           ))}
         </div>
+
+        {intel.parentSummary && (
+          <div className="card parent-card">
+            <div className="parent-card-head">
+              <div className="card-label">Parent / guardian summary</div>
+              <div className="lang-switch">
+                {['English', 'Spanish', 'Chinese'].map((lang) => (
+                  <button key={lang} className={pLang === lang ? 'seg on' : 'seg'} onClick={() => setLang(lang)} disabled={pBusy}>{lang}</button>
+                ))}
+              </div>
+            </div>
+            <p className="parent-summary">{pBusy ? 'Translating…' : (pLang === 'English' ? intel.parentSummary : (pText || intel.parentSummary))}</p>
+          </div>
+        )}
+
         <div className="prepare-actions">
           <Link className="primary" to={`/learner/${learner.id}`}>View updated profile</Link>
           <Link className="ghost" to="/">Back to dashboard</Link>

@@ -42,7 +42,7 @@ export default function App() {
     ['/prepare', 'Make lesson plan', 'prepare', false],
     ['/people', 'Learners', 'learners', false],
     ['/lessons', 'Topics / Lessons', 'lessons', false],
-    ['/calendar', 'Calendar / Availability', 'calendar', false],
+    ['/calendar', 'Calendar', 'calendar', false],
   ]
 
   return (

@@ -33,7 +33,7 @@ body {
   letter-spacing: 0.002em;
   -webkit-font-smoothing: antialiased;
   text-rendering: optimizeLegibility;
-  zoom: 1.32; /* 20% larger than the previous 1.1 — covers modals too */
+  zoom: 1.22; /* bigger text, but sized so the 2-column pages don't overflow a laptop screen */
 }
 
 .loading {
@@ -66,7 +66,7 @@ body {
 .topnav a.active { color: var(--accent); background: var(--accent-soft); }
 .nav-icon { width: 16px; height: 16px; flex-shrink: 0; }
 
-.content { padding: 44px 52px 96px; max-width: 1200px; width: 100%; margin: 0 auto; }
+.content { padding: 44px 52px 96px; max-width: 1100px; width: 100%; margin: 0 auto; }
 
 /* ---------- Typography & page structure ---------- */
 
@@ -474,7 +474,8 @@ input:focus, select:focus, textarea:focus {
 .filter-bar select { min-width: 130px; }
 
 /* ---------- Prepare session ---------- */
-.prepare-layout { display: grid; grid-template-columns: 1fr 300px; gap: 28px; align-items: start; }
+.prepare-layout { display: grid; grid-template-columns: minmax(0, 1fr) 280px; gap: 28px; align-items: start; }
+.prepare-main { min-width: 0; }
 .bento { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin-bottom: 24px; }
 .plan-strip { display: grid; grid-template-columns: repeat(5, 1fr); gap: 12px; margin: 10px 0 16px; }
 .plan-cell { background: var(--accent-soft); border: 1px solid var(--line); border-radius: 10px; padding: 14px; }
@@ -604,7 +605,10 @@ input:focus, select:focus, textarea:focus {
 
 /* AI Weekly Recommendation */
 .weekly-head { display: flex; justify-content: space-between; align-items: baseline; gap: 12px; margin-bottom: 14px; flex-wrap: wrap; }
-.week-days { display: grid; grid-template-columns: repeat(6, 1fr); gap: 10px; }
+.week-days { display: grid; grid-template-columns: repeat(5, 1fr); gap: 10px; }
+.week-max { display: flex; align-items: center; justify-content: space-between; margin-top: 14px; padding-top: 14px; border-top: 1px solid var(--line); }
+.week-max-label { font-size: 13px; font-weight: 600; color: var(--subhead); }
+.week-max-val { font-family: var(--serif); font-size: 22px; color: var(--accent); }
 .week-day { background: var(--bg); border: 1px solid var(--line); border-radius: 10px; padding: 12px 10px; display: flex; flex-direction: column; gap: 3px; align-items: flex-start; min-height: 78px; }
 .week-day.rest { opacity: 0.6; }
 .week-day.max { background: var(--accent-soft); border-color: transparent; }
@@ -698,12 +702,31 @@ input:focus, select:focus, textarea:focus {
 
 /* ============ Prepare session: bigger fields + schedule ============ */
 .prepare-fields { display: grid; grid-template-columns: 1.3fr 1.6fr 0.8fr; gap: 18px; margin-bottom: 26px; }
-.prepare-fields label { font-size: 14px; color: var(--muted); gap: 8px; }
-.prepare-fields select { font-size: 16px; padding: 13px 14px; }
+.prepare-fields label { font-size: 14px; color: var(--muted); gap: 8px; min-width: 0; }
+.prepare-fields select, .prepare-fields input { font-size: 16px; padding: 13px 14px; width: 100%; max-width: 100%; box-sizing: border-box; }
+.prepare-cal-row { display: flex; align-items: center; gap: 12px; margin-bottom: 26px; flex-wrap: wrap; }
+.lesson-structure-label { display: block; font-size: 15px; font-weight: 700; color: var(--espresso); margin-bottom: 12px; }
 .schedule-box { margin: 18px 0 8px; }
 .schedule-row { display: flex; gap: 14px; align-items: flex-end; margin-top: 8px; flex-wrap: wrap; }
 .schedule-row label { flex: 0 0 auto; }
 .schedule-row input { font-size: 14px; }
+
+/* Parent-summary language switch (debrief done screen) */
+.parent-card { margin-top: 20px; }
+.parent-card-head { display: flex; align-items: center; justify-content: space-between; gap: 12px; margin-bottom: 10px; flex-wrap: wrap; }
+.lang-switch { display: inline-flex; gap: 6px; border: 1px solid var(--line); border-radius: 8px; overflow: hidden; }
+
+/* Debriefs section on Topics / Lessons */
+.tl-debriefs { margin-top: 40px; }
+.debrief-cards { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 16px; margin-top: 16px; }
+.debrief-card { background: var(--surface); border: 1px solid var(--line); border-radius: var(--radius); box-shadow: var(--shadow); padding: 18px 20px; }
+.debrief-card-top { display: flex; justify-content: space-between; align-items: center; gap: 8px; margin-bottom: 10px; }
+.debrief-topic { font-family: var(--serif); font-size: 16px; color: var(--ink); margin-bottom: 8px; }
+.debrief-stats { display: flex; flex-wrap: wrap; gap: 6px 14px; margin-bottom: 8px; }
+.debrief-stat { font-size: 12.5px; color: var(--muted); }
+.debrief-summary { font-size: 13.5px; color: var(--ink); }
+.debrief-note { font-size: 13px; color: var(--muted); font-style: italic; margin-top: 6px; }
+.debrief-parent { font-size: 12.5px; color: var(--muted); border-top: 1px solid var(--line); padding-top: 8px; margin-top: 8px; }
 
 /* ============ Debrief flow ============ */
 .debrief-form { display: flex; flex-direction: column; gap: 22px; }
@@ -741,7 +764,7 @@ input:focus, select:focus, textarea:focus {
 /* mark-as-done affordance */
 .mark-done { display: inline-block; color: var(--success); font-weight: 500; font-size: 13px; text-decoration: none; border: 1px solid var(--success-line); background: var(--success-soft); border-radius: 999px; padding: 5px 14px; white-space: nowrap; }
 .mark-done:hover { filter: brightness(0.97); }
-.done-tag { background: var(--success-soft); border-color: var(--success-line); color: var(--success); }
+.done-tag { background: #efeadf; border-color: var(--line); color: var(--muted); opacity: 0.75; }
 
 /* prepare fields — more prominent */
 .prepare-fields { background: var(--surface); border: 1px solid var(--line); border-radius: 14px; padding: 20px 22px; }

@@ -93,8 +93,13 @@ export default function LessonBuilder({ state, refresh }) {
         <header className="page-head"><div><div className="eyebrow">New learner</div><h1>Getting to know {learner.name.split(' ')[0]}</h1><p className="focus-line">A few taps so MentorFlow can personalize every future session.</p></div></header>
         <div className="debrief-form">
           <label>What subject?<input value={ob.subject} onChange={(e) => setOb({ ...ob, subject: e.target.value })} placeholder="e.g. Math, Reading" /></label>
-          <label>First topic <span className="legend-hint">this becomes a topic you can reuse</span><input list="ob-topics" value={ob.topic} onChange={(e) => setOb({ ...ob, topic: e.target.value })} placeholder="e.g. Times tables" />
-            <datalist id="ob-topics">{state.topics.map((t) => <option key={t.id} value={t.name} />)}</datalist>
+          <label>First topic <span className="legend-hint">this becomes a topic you can reuse</span>
+            <select value={ob.topic} onChange={(e) => setOb({ ...ob, topic: e.target.value })}>
+              <option value="">Select a topic…</option>
+              {[...new Set(state.topics.map((t) => t.name).concat(state.learners.flatMap((l) => l.topics.map((t) => t.name))).filter(Boolean))].map((name) => (
+                <option key={name} value={name}>{name}</option>
+              ))}
+            </select>
           </label>
           <fieldset className="rate-block">
             <legend>Current confidence</legend>
@@ -132,8 +137,19 @@ export default function LessonBuilder({ state, refresh }) {
           <label>Minutes
             <select value={duration} onChange={(e) => setDuration(+e.target.value)}>{[30, 45, 60, 90].map((d) => <option key={d} value={d}>{d}</option>)}</select>
           </label>
+          <label>Date
+            <input type="date" value={date} onChange={(e) => setDate(e.target.value)} />
+          </label>
+          <label>Time
+            <input type="time" value={time} onChange={(e) => setTime(e.target.value)} />
+          </label>
+        </div>
+        <div className="prepare-cal-row">
+          <button type="button" className="ghost small" onClick={schedule}>+ Add to calendar</button>
+          <span className="legend-hint">Adds this session to the calendar at the date & time above.</span>
         </div>
 
+        <span className="attach-label lesson-structure-label">Lesson Structure:</span>
         <div className="bento">
           <div className="card"><div className="card-label">Session objective</div><p>{plan?.goal || `Represent and compare ${topic.toLowerCase()} with confidence.`}</p></div>
           <div className="card noticing"><div className="card-label">AI observations</div><p>{ins.observations[0]}</p></div>
@@ -184,14 +200,6 @@ export default function LessonBuilder({ state, refresh }) {
               ))}
             </div>
             {plan.materials?.length > 0 && <p className="materials">Bring: {plan.materials.join(' · ')}</p>}
-            <div className="schedule-box">
-              <span className="attach-label">Schedule this session <span className="legend-hint">optional</span></span>
-              <div className="schedule-row">
-                <label>Date<input type="date" value={date} onChange={(e) => setDate(e.target.value)} /></label>
-                <label>Time<input type="time" value={time} onChange={(e) => setTime(e.target.value)} /></label>
-                <button className="ghost" onClick={schedule}>Schedule session</button>
-              </div>
-            </div>
           </>
         )}
 

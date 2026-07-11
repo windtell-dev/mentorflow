@@ -16,30 +16,6 @@ const STAT_ICONS = {
   spark: <><path d="M12 3l1.8 5.2L19 10l-5.2 1.8L12 17l-1.8-5.2L5 10l5.2-1.8z" /></>,
 }
 
-// ---- Ask MentorFlow (compact, not chat-first) ----
-function AskCard() {
-  const [q, setQ] = useState('')
-  const [answer, setAnswer] = useState('')
-  const [busy, setBusy] = useState(false)
-  const ask = async (e) => {
-    e.preventDefault()
-    if (!q.trim()) return
-    setBusy(true); setAnswer('')
-    const res = await fetch('/api/ask', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ question: q }) })
-    setAnswer((await res.json()).answer); setBusy(false)
-  }
-  return (
-    <div className="card ask-card">
-      <div className="card-label">Ask MentorFlow</div>
-      <form className="ask-form" onSubmit={ask}>
-        <input value={q} onChange={(e) => setQ(e.target.value)} placeholder="Ask about lesson planning or learners…" />
-        <button className="primary" type="submit" disabled={busy}>{busy ? '…' : 'Ask'}</button>
-      </form>
-      {(busy || answer) && <p className="ask-answer">{busy ? 'Thinking…' : answer}</p>}
-    </div>
-  )
-}
-
 // ---- AI Teaching Style Insights (the mentor's own patterns) ----
 const GEN_MSGS = ['Reading your sessions…', 'Finding your patterns…', 'Scoring what actually works…']
 function GenLine() {
@@ -175,7 +151,7 @@ export default function Dashboard({ state }) {
 
           <div className="card weekly-card">
             <div className="weekly-head">
-              <div className="card-label"><span className="gen-spark still">✦</span> AI Weekly Recommendation</div>
+              <div className="card-label"><span className="gen-spark still">✦</span> Weekly Schedule Recommendation</div>
               <span className="legend-hint">Based on your availability and learner needs</span>
             </div>
             <div className="week-days">
@@ -186,14 +162,12 @@ export default function Dashboard({ state }) {
                     : <span className="week-rest">Rest day</span>}
                 </div>
               ))}
-              <div className="week-day max">
-                <span className="week-dow">Max / week</span>
-                <span className="week-count big">{max}h</span>
-              </div>
+            </div>
+            <div className="week-max">
+              <span className="week-max-label">Max / week</span>
+              <span className="week-max-val">{max}h</span>
             </div>
           </div>
-
-          <AskCard />
         </div>
 
         <aside className="dash-side">

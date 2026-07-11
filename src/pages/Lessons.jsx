@@ -12,6 +12,10 @@ export default function Lessons({ state, refresh }) {
 
   const byId = Object.fromEntries(state.learners.map((l) => [l.id, l]))
   const topicsFor = (r) => state.topics.filter((t) => t.name === r.topic || t.learnerId === r.learner.id)
+  const debriefs = state.learners
+    .flatMap((l) => (l.debriefs || []).map((d) => ({ ...d, learner: l })))
+    .filter((d) => learnerId === 'all' || d.learner.id === learnerId)
+    .sort((a, b) => (a.date < b.date ? 1 : -1))
 
   const rows = useMemo(() =>
     state.learners
@@ -130,6 +134,36 @@ export default function Lessons({ state, refresh }) {
           </div>
         </section>
       </div>
+
+      <section className="tl-debriefs">
+        <div className="tl-lessons-head">
+          <h2 className="tl-heading">Debriefs</h2>
+          <span className="legend-hint">Saved automatically each time you mark a session done.</span>
+        </div>
+        {debriefs.length === 0 && <p className="empty-hint">No debriefs yet — mark a session done to build the log.</p>}
+        <div className="debrief-cards">
+          {debriefs.map((d) => (
+            <div className="debrief-card" key={d.id || `${d.learnerId}-${d.date}`}>
+              <div className="debrief-card-top">
+                <Link to={`/learner/${d.learner.id}`} className="cell-learner">
+                  <span className="avatar" style={{ background: d.learner.tint }}>{d.learner.name[0]}</span>
+                  {d.learner.name.split(' ')[0]}
+                </Link>
+                <span className="muted-cell">{fmt(d.date)}</span>
+              </div>
+              <div className="debrief-topic">{d.topic}</div>
+              <div className="debrief-stats">
+                <span className="debrief-stat">Understanding {d.understanding}/5</span>
+                <span className="debrief-stat">Confidence {d.confidence}/5</span>
+                {d.strategyWorked && <span className="debrief-stat">Worked: {d.strategyWorked}</span>}
+              </div>
+              {d.timelineEntry && <p className="debrief-summary">{d.timelineEntry}</p>}
+              {d.note && <p className="debrief-note">“{d.note}”</p>}
+              {d.parentSummary && <p className="debrief-parent">{d.parentSummary}</p>}
+            </div>
+          ))}
+        </div>
+      </section>
 
       {topicModal && (
         <div className="modal-backdrop" onClick={() => setTopicModal(false)}>

@@ -192,7 +192,8 @@ function mockDebrief(learner, d) {
 // Debrief: mentor marks a session done → structured teaching intelligence out.
 app.post('/api/debrief', async (req, res) => {
   const { learnerId, sessionId, understanding = 3, confidence = 3, engagement = 3,
-    clicked = '', confused = '', strategyWorked = '', strategyFailed = '', reviewNext = '', wantParentSummary = false } = req.body
+    clicked = '', confused = '', strategyWorked = '', strategyFailed = '', reviewNext = '', wantParentSummary = false,
+    note = '', implemented = [] } = req.body
   const learner = db.learners.find((l) => l.id === learnerId)
   if (!learner) return res.status(404).json({ error: 'learner not found' })
 
@@ -207,7 +208,7 @@ app.post('/api/debrief', async (req, res) => {
 
   // The mentor tells us which planned strategies they actually used → correlate with the gain
   const delta = (understanding - prev.understanding) + (confidence - prev.confidence)
-  for (const s of (req.body.implemented || [])) db.tutor.strategyLog.push({ strategy: s, delta, learnerId, date })
+  for (const s of implemented) db.tutor.strategyLog.push({ strategy: s, delta, learnerId, date })
 
   const ai = await gradient(
     'You are the quiet memory of a mentoring practice. From a post-session DEBRIEF plus measured trends, produce teaching intelligence for the mentor — never teach the subject. Respond with JSON ONLY, exactly this shape: {"observations":[string,string],"timelineEntry":string,"parentSummary":string,"nextFocus":string,"recommendations":[string,string,string],"homework":[string,string],"strategyNote":string,"trendNote":string}. observations cite the numbers. timelineEntry is one short line for a teaching timeline. parentSummary is a warm jargon-free paragraph (empty string if not requested). recommendations are next-session moves. homework is resource/practice suggestions. strategyNote judges what worked vs did not. trendNote summarizes confidence/understanding movement. Never invent events not in the debrief.',
@@ -245,6 +246,17 @@ app.post('/api/debrief', async (req, res) => {
     updatedAt: date,
     reflectionCount: (learner.insights.reflectionCount || 0) + 1,
   }
+
+  // Full debrief log — feeds the profile AND the Debriefs section on Topics/Lessons
+  learner.debriefs = learner.debriefs || []
+  learner.debriefs.unshift({
+    id: `d-${Date.now()}`, date, learnerId, learnerName: learner.name, topic: session?.topic || learner.focus,
+    understanding, confidence, clicked, strategyWorked, implemented, note,
+    timelineEntry: intel.timelineEntry, nextFocus: intel.nextFocus,
+    parentSummary: wantParentSummary ? intel.parentSummary : '',
+    model: ai ? MODEL_DEEP : 'mock',
+  })
+
   save()
   res.json({ intel: { ...intel, parentSummary: wantParentSummary ? intel.parentSummary : null }, aiUsed: !!ai })
 })
@@ -253,7 +265,7 @@ app.post('/api/debrief', async (req, res) => {
 app.post('/api/translate', async (req, res) => {
   const learner = db.learners.find((l) => l.id === req.body.learnerId)
   if (!learner) return res.status(404).json({ error: 'learner not found' })
-  const lang = learner.homeLanguage || 'Spanish'
+  const lang = req.body.language || learner.homeLanguage || 'Spanish'
   const text = await chat(
     `You translate messages from a mentor to a learner's family. Translate into ${lang}. Keep the warm, plain tone. Return only the translation.`,
     learner.insights.parentSummary,
