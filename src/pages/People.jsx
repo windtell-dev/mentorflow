@@ -14,9 +14,14 @@ const FIELDS = [
   ['notes', 'Other notes', true],
 ]
 
-function AddLearnerModal({ onClose, onAdd }) {
+const PLACEHOLDERS = { goals: 'Add description', challenge: 'Add description', preferences: 'Add description' }
+
+function AddLearnerModal({ state, onClose, onAdd }) {
   const [form, setForm] = useState({})
   const [busy, setBusy] = useState(false)
+  const subjects = [...new Set(state.topics.map((t) => t.subject).concat(state.learners.map((l) => l.subject)).filter(Boolean))]
+  const topicNames = [...new Set(state.topics.map((t) => t.name).concat(state.learners.flatMap((l) => l.topics.map((t) => t.name))).filter(Boolean))]
+  const set = (key, val) => setForm({ ...form, [key]: val })
   const submit = async (e) => {
     e.preventDefault()
     if (!form.name?.trim()) return
@@ -36,8 +41,18 @@ function AddLearnerModal({ onClose, onAdd }) {
             <label key={key} className={key === 'notes' || key === 'name' ? 'span-2' : ''}>
               {label}
               {key === 'notes'
-                ? <textarea rows={2} value={form[key] || ''} onChange={(e) => setForm({ ...form, [key]: e.target.value })} />
-                : <input value={form[key] || ''} onChange={(e) => setForm({ ...form, [key]: e.target.value })} />}
+                ? <textarea rows={2} placeholder="Add description" value={form[key] || ''} onChange={(e) => set(key, e.target.value)} />
+                : key === 'subject'
+                  ? <select value={form[key] || ''} onChange={(e) => set(key, e.target.value)}>
+                      <option value="">Select a subject…</option>
+                      {subjects.map((s) => <option key={s} value={s}>{s}</option>)}
+                    </select>
+                  : key === 'focus'
+                    ? <select value={form[key] || ''} onChange={(e) => set(key, e.target.value)}>
+                        <option value="">Select a topic…</option>
+                        {topicNames.map((t) => <option key={t} value={t}>{t}</option>)}
+                      </select>
+                    : <input placeholder={PLACEHOLDERS[key] || ''} value={form[key] || ''} onChange={(e) => set(key, e.target.value)} />}
             </label>
           ))}
           <div className="modal-actions span-2">
@@ -96,7 +111,7 @@ export default function People({ state, refresh }) {
         })}
       </div>
 
-      {modal && <AddLearnerModal onClose={() => setModal(false)} onAdd={onAdd} />}
+      {modal && <AddLearnerModal state={state} onClose={() => setModal(false)} onAdd={onAdd} />}
     </div>
   )
 }

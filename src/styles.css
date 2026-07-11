@@ -4,14 +4,14 @@
   /* ☕ Coffee-house premium — warm ivory, cream, mocha & espresso */
   --bg: #f4efe5;            /* warm ivory */
   --surface: #fbf8f1;       /* cream card */
-  --ink: #2c231b;           /* espresso text */
-  --muted: #8a7b67;         /* warm taupe */
-  --subhead: #4a3b2c;       /* mocha — label anchor */
+  --ink: #241c14;           /* espresso text — darkened */
+  --muted: #574835;         /* warm taupe — high contrast (AA) */
+  --subhead: #3a2c1e;       /* mocha — label anchor, darkened */
   --line: #e7ddcc;          /* warm taupe border */
   --radius: 18px;           /* large rounded corners */
   --radius-btn: 999px;      /* pill buttons */
   --shadow: 0 2px 10px rgba(74,52,32,0.05);
-  --accent: #6f4e37;        /* mocha accent */
+  --accent: #5c3e29;        /* mocha accent — darkened for link contrast */
   --accent-soft: #eee5d6;   /* soft mocha tint */
   --espresso: #3a2b22;      /* primary button */
   --cream-text: #f6efe3;    /* text on espresso */
@@ -33,7 +33,7 @@ body {
   letter-spacing: 0.002em;
   -webkit-font-smoothing: antialiased;
   text-rendering: optimizeLegibility;
-  zoom: 1.1; /* everything 10% larger — covers modals too */
+  zoom: 1.32; /* 20% larger than the previous 1.1 — covers modals too */
 }
 
 .loading {
@@ -52,7 +52,7 @@ body {
   position: sticky; top: 0; z-index: 20;
 }
 .topbar-brand { display: flex; flex-direction: column; line-height: 1.15; }
-.wordmark { font-family: var(--serif); font-size: 25px; letter-spacing: -0.01em; }
+.wordmark { font-family: var(--serif); font-size: 42px; line-height: 1; letter-spacing: -0.02em; color: var(--espresso); }
 .brand-motto { font-family: var(--serif); font-style: italic; font-size: 12.5px; color: var(--muted); }
 
 .topnav { display: flex; gap: 4px; align-items: center; }
@@ -70,7 +70,7 @@ body {
 
 /* ---------- Typography & page structure ---------- */
 
-h1 { font-family: var(--serif); font-weight: 600; font-size: 33px; line-height: 1.2; letter-spacing: -0.01em; }
+h1 { font-family: var(--serif); font-weight: 600; font-size: 33px; line-height: 1.2; letter-spacing: -0.01em; color: var(--espresso); }
 h2 { line-height: 1.25; }
 
 .eyebrow {
@@ -90,7 +90,7 @@ h2 { line-height: 1.25; }
 .breadcrumb a:hover { color: var(--ink); }
 
 .section-title {
-  font-family: var(--serif); font-weight: 600; font-size: 20px;
+  font-family: var(--serif); font-weight: 600; font-size: 20px; color: var(--espresso);
   margin: 36px 0 16px; padding-bottom: 10px; border-bottom: 1px solid var(--line);
 }
 .section-title:first-child { margin-top: 0; }
@@ -792,7 +792,7 @@ input:focus, select:focus, textarea:focus {
 
 /* ============ Topics / Lessons split ============ */
 .tl-split { display: grid; grid-template-columns: 1fr 1fr; gap: 32px; align-items: start; }
-.tl-heading { font-family: var(--serif); font-weight: 600; font-size: 18px; color: var(--ink); margin: 0; padding: 0; border: none; }
+.tl-heading { font-family: var(--serif); font-weight: 600; font-size: 18px; color: var(--espresso); margin: 0; padding: 0; border: none; }
 .tl-topics-head, .tl-lessons-head { display: flex; justify-content: space-between; align-items: center; gap: 12px; margin-bottom: 16px; min-height: 34px; }
 .topic-cards { display: flex; flex-direction: column; gap: 12px; }
 .topic-card { background: var(--surface); border: 1px solid var(--line); border-radius: var(--radius); box-shadow: var(--shadow); padding: 16px 18px; display: flex; flex-direction: column; gap: 8px; }

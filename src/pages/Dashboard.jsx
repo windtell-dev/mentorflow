@@ -165,7 +165,7 @@ export default function Dashboard({ state }) {
                     <span className="today-action">
                       {s.done ? <span className="quiet-tag done-tag">✓ done</span>
                         : s.prepared ? <Link to={`/debrief/${s.id}`} className="mark-done">Mark as done</Link>
-                          : <Link to={`/prepare/${s.learnerId}?session=${s.id}`} className="quiet-link accent">Prepare →</Link>}
+                          : <Link to={`/prepare/${s.learnerId}?session=${s.id}`} className="quiet-link accent">Prepare Lesson →</Link>}
                     </span>
                   </div>
                 )

@@ -35,14 +35,14 @@ export default function Lessons({ state, refresh }) {
   const toggle = async (r) => { await post('/api/lessons/toggle', { learnerId: r.learner.id, date: r.date, topic: r.topic }); await refresh() }
 
   const [topicModal, setTopicModal] = useState(false)
-  const [nt, setNt] = useState({ name: '', subject: '', subtopics: '' })
+  const [nt, setNt] = useState({ name: '', subject: '', subtopics: '', description: '' })
   const [busy, setBusy] = useState(false)
   const saveTopic = async () => {
     if (!nt.name.trim()) return
     setBusy(true)
-    await post('/api/topics', { name: nt.name, subject: nt.subject || 'General', subtopics: nt.subtopics })
+    await post('/api/topics', { name: nt.name, subject: nt.subject || 'General', subtopics: nt.subtopics, description: nt.description })
     await refresh()
-    setBusy(false); setNt({ name: '', subject: '', subtopics: '' }); setTopicModal(false)
+    setBusy(false); setNt({ name: '', subject: '', subtopics: '', description: '' }); setTopicModal(false)
   }
 
   const Card = (r) => {
@@ -140,6 +140,7 @@ export default function Lessons({ state, refresh }) {
               <label>Topic name<input autoFocus value={nt.name} onChange={(e) => setNt({ ...nt, name: e.target.value })} placeholder="e.g. Comparing fractions" onKeyDown={(e) => e.key === 'Enter' && saveTopic()} /></label>
               <label>Subject<input value={nt.subject} onChange={(e) => setNt({ ...nt, subject: e.target.value })} placeholder="e.g. Math" /></label>
               <label>Subtopics<input value={nt.subtopics} onChange={(e) => setNt({ ...nt, subtopics: e.target.value })} placeholder="Equivalent fractions, Number lines" /></label>
+              <label>Description<textarea rows={2} value={nt.description} onChange={(e) => setNt({ ...nt, description: e.target.value })} placeholder="Add description" /></label>
               <div className="modal-actions">
                 <button type="button" className="ghost" onClick={() => setTopicModal(false)}>Cancel</button>
                 <button className="primary" onClick={saveTopic} disabled={busy || !nt.name.trim()}>{busy ? 'Adding…' : 'Add topic'}</button>
