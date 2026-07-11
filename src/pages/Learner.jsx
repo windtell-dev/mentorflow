@@ -43,7 +43,7 @@ export default function Learner({ state, refresh }) {
 
   return (
     <div>
-      <div className="breadcrumb"><Link to="/people">← Back to people</Link></div>
+      <div className="breadcrumb"><Link to="/people">← All learners</Link></div>
       <header className="page-head">
         <div>
           <h1>{learner.name} <span className="h1-grade">{learner.grade}</span></h1>
@@ -76,11 +76,15 @@ export default function Learner({ state, refresh }) {
           <div className="trend-pair">
             <div className="card">
               <div className="card-label">Confidence trend</div>
-              <TrendChart values={learner.sessionRatings.map((r) => r.confidence)} dates={dates} color="var(--ink)" />
+              {learner.sessionRatings.length > 0
+                ? <TrendChart values={learner.sessionRatings.map((r) => r.confidence)} dates={dates} color="var(--ink)" />
+                : <p className="empty-hint">Trends appear after your first session.</p>}
             </div>
             <div className="card">
               <div className="card-label">Understanding trend</div>
-              <TrendChart values={learner.sessionRatings.map((r) => r.understanding)} dates={dates} color="var(--accent)" />
+              {learner.sessionRatings.length > 0
+                ? <TrendChart values={learner.sessionRatings.map((r) => r.understanding)} dates={dates} color="var(--accent)" />
+                : <p className="empty-hint">Trends appear after your first session.</p>}
             </div>
           </div>
 
@@ -106,8 +110,9 @@ export default function Learner({ state, refresh }) {
           <div className="three">
             <div className="card">
               <div className="card-label">Last reflection</div>
-              <p className="reflection-quote">“{learner.timeline[0]?.text}”</p>
-              <div className="card-foot">{learner.timeline[0]?.date}</div>
+              {learner.timeline[0]
+                ? <><p className="reflection-quote">“{learner.timeline[0].text}”</p><div className="card-foot">{learner.timeline[0].date}</div></>
+                : <p className="empty-hint">No reflections yet — they appear after your first debrief.</p>}
             </div>
             <div className="card">
               <div className="card-label">Next session</div>
