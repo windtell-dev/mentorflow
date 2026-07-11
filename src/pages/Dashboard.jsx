@@ -8,6 +8,14 @@ const greeting = () => {
 }
 const longDate = () => new Date().toLocaleDateString('en-US', { weekday: 'long', month: 'long', day: 'numeric' })
 
+// Subtle monochrome line icons for the stat cards
+const SI = ({ d }) => <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round">{d}</svg>
+const STAT_ICONS = {
+  clock: <><circle cx="12" cy="12" r="9" /><path d="M12 7v5l3 2" /></>,
+  people: <><circle cx="9" cy="9" r="3" /><path d="M2 20c0-3.5 3.2-5 7-5s7 1.5 7 5" /><path d="M16 8.5a2.8 2.8 0 0 1 0 5.5" /><path d="M22 20c0-2.4-1.6-3.9-4-4.4" /></>,
+  spark: <><path d="M12 3l1.8 5.2L19 10l-5.2 1.8L12 17l-1.8-5.2L5 10l5.2-1.8z" /></>,
+}
+
 // ---- Ask MentorFlow (compact, not chat-first) ----
 function AskCard() {
   const [q, setQ] = useState('')
@@ -125,9 +133,18 @@ export default function Dashboard({ state }) {
       <div className="dash-grid">
         <div className="dash-main">
           <div className="stat-strip">
-            <div className="stat"><span className="stat-num">{hours}h {tutor.totalMinutes % 60}m</span><span className="stat-label">teaching together</span></div>
-            <div className="stat"><span className="stat-num">{learners.length}</span><span className="stat-label">learners helped</span></div>
-            <div className="stat"><span className="stat-num">{tutor.breakthroughs} <span className="star-mark">★</span></span><span className="stat-label">breakthrough moments</span></div>
+            <div className="stat">
+              <div className="stat-head"><span className="stat-icon"><SI d={STAT_ICONS.clock} /></span><span className="stat-title">Teaching Time</span></div>
+              <span className="stat-value">{hours}h {tutor.totalMinutes % 60}m</span>
+            </div>
+            <div className="stat">
+              <div className="stat-head"><span className="stat-icon"><SI d={STAT_ICONS.people} /></span><span className="stat-title">Learners Helped</span></div>
+              <span className="stat-value">{learners.length}</span>
+            </div>
+            <div className="stat">
+              <div className="stat-head"><span className="stat-icon"><SI d={STAT_ICONS.spark} /></span><span className="stat-title">Breakthrough Moments</span></div>
+              <span className="stat-value">{tutor.breakthroughs} <span className="star-mark">★</span></span>
+            </div>
           </div>
 
           <div className="today-card">
